@@ -1,6 +1,13 @@
 import * as PIXI from 'pixi.js'
 import app from "./app";
 
+export class Cursor {
+    static getPos() {
+        const mouse = app.renderer.plugins.interaction.mouse.global;
+        return {x: mouse.x, y: mouse.y}
+    }
+}
+
 export default () => {
 // Get the texture for rope.
     const trailTexture = PIXI.Texture.from('assets/trail.png');
@@ -79,4 +86,5 @@ export default () => {
         return (2 * t3 - 3 * t2 + 1) * p[0] + (t3 - 2 * t2 + t) * m[0] + (-2 * t3 + 3 * t2) * p[1] + (t3 - t2) * m[1];
     }
 
+    return new Cursor();
 }
