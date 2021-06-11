@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js'
 
 const app = new PIXI.Application({
-    width: 720,
-    height: 1280,
+    width: 480,
+    height: 640,
     backgroundColor: 0x1099bb,
     view: document.querySelector('#scene'),
     resolution: window.devicePixelRatio || 1

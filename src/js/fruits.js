@@ -5,12 +5,8 @@ import Wave from "./game_entities/wave";
 // holder to store the fruits
 let wave;
 
-const startDroppingFruits = () => {
-    wave = new Wave();
-}
-
-const tick = () => {
-// create a bounding box for the little dudes
+export default () => {
+    // create a bounding box for the little dudes
     const dudeBoundsPadding = 100;
     const dudeBounds = new PIXI.Rectangle(-dudeBoundsPadding,
         -dudeBoundsPadding,
@@ -19,15 +15,13 @@ const tick = () => {
 
     return () => {
         // iterate through the dudes and update their position
-        wave.tick();
+        if(!wave) {
+            wave = new Wave();
+        }
         if(!wave.isActive) {
             wave.clean();
             wave = new Wave();
         }
+        return wave;
     };
-}
-
-export default () => {
-    startDroppingFruits();
-    return tick();
 }

@@ -1,8 +1,9 @@
 import Fruit from "./fruit";
 import app from "../app";
+import {hitTestRectangle} from "../collision_detecror";
 
 export default class Wave {
-    
+
     constructor() {
         this._waveSize = Math.random() * 5 + 1;
         this._active = this._waveSize;
@@ -14,11 +15,13 @@ export default class Wave {
             app.stage.addChild(fruit.sprite);
         }
     }
-    
+
     tick() {
         for (let i = 0; i < this._fruits.length; i++) {
-            this._fruits[i].tick();
-            if (this._fruits[i].sprite.y > app.screen.height) {
+            let fruit = this._fruits[i];
+            fruit.tick();
+            if (fruit.sprite.y > app.screen.height) {
+                fruit.visible = false;
                 this._active--;
             }
 
@@ -37,12 +40,24 @@ export default class Wave {
         }
     }
 
+
+    checkCollisions(collider) {
+        for (let i = 0; i < this._fruits.length; i++) {
+            let fruit = this._fruits[i];
+            const isColliding = hitTestRectangle(collider, fruit.sprite);
+            if (isColliding && fruit.sprite.visible) {
+                fruit.sprite.visible = false;
+                this._active--;
+            }
+        }
+    }
+
     clean() {
         for (let i = 0; i < this._fruits.length; i++) {
             app.stage.removeChild(this._fruits[i].sprite); //is .sprite.visible = false is more efficient?
         }
     }
-    
+
     get fruits() {
         return this._fruits;
     }
