@@ -17,7 +17,11 @@
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "core-js": "^3.6.4",
-    "pixi.js": "^5.2.1"
+    "pixi.js": "^5.2.1",
+    "@mediapipe/camera_utils": "^0.1.1606863050",
+    "@mediapipe/control_utils": "^0.1.1606863011",
+    "@mediapipe/drawing_utils": "^0.2.1614797616",
+    "@mediapipe/hands": "^0.1.1614621970"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
