@@ -10,6 +10,12 @@ export default class Fruit {
     set sprite(sprite) {
         this._sprite = sprite;
     }
+    get boundaries() {
+        return this._boundaries;
+    }
+    set boundaries(boundaries) {
+        this._boundaries = boundaries;
+    }
     constructor() {
         this._sprite = PIXI.Sprite.from('assets/pineapple.png');
         this._velocity = 0;
@@ -17,7 +23,7 @@ export default class Fruit {
         // set the anchor point so the texture is centered on the sprite
         this._sprite.anchor.set(0.5);
         // set a random scale for the dude - no point them all being the same size!
-        this._sprite.scale.set(0.05 + Math.random() * 0.1);
+        this._sprite.scale.set(0.05 + Math.random() * 0.05);
         // finally lets set the dude to be at a random position..
         this._sprite.x = Math.random() * app.screen.width;
         this._sprite.y = app.screen.height;
@@ -32,7 +38,15 @@ export default class Fruit {
         this._sprite.turningSpeed = this._sprite.x >= app.screen.width / 2 ? Math.random() * 0.2 + 0.2 : Math.random() * 0.2 - 0.2;
 
         // create a random speed for the dude between 2 - 4
-        this._sprite.speed = 12 + Math.random() * 2;
+        this._sprite.speed = 8 + Math.random() * 2;
+
+        const rect = PIXI.Sprite.from(PIXI.Texture.WHITE);
+        rect.width = this._sprite.width * 0.8;
+        rect.height =  this._sprite.height * 0.8;
+        rect.tint = 0xFF0000;
+        rect.x = this._sprite.x - this._sprite.width / 2;
+        rect.y = this._sprite.y - this._sprite.height / 2;
+        this.boundaries = rect
     }
 
     tick() {
@@ -42,5 +56,8 @@ export default class Fruit {
         this.sprite.x += Math.sin(this.sprite.direction) * this.sprite.speed;
         this.sprite.y += Math.cos(this.sprite.direction) * (this.sprite.speed - this._velocity);
         this.sprite.rotation = -this.sprite.direction - Math.PI / 2;
+
+        this._boundaries.x = this._sprite.x - this._sprite.width / 2;
+        this._boundaries.y = this._sprite.y - this._sprite.height / 2;
     }
 }

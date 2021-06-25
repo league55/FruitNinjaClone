@@ -13,6 +13,7 @@ export default class Wave {
             const fruit = new Fruit();
             this._fruits.push(fruit);
             app.stage.addChild(fruit.sprite);
+            //app.stage.addChild(fruit.boundaries);
         }
     }
 
@@ -25,31 +26,22 @@ export default class Wave {
                 this._active--;
             }
 
-            // wrap the dudes by testing their bounds...
-            //if (dude.x < dudeBounds.x) {
-            //    dude.x += dudeBounds.width;
-            //} else if (dude.x > dudeBounds.x + dudeBounds.width) {
-            //    dude.x -= dudeBounds.width;
-            //}
-//
-            //if (dude.y < dudeBounds.y) {
-            //    dude.y += dudeBounds.height;
-            //} else if (dude.y > dudeBounds.y + dudeBounds.height) {
-            //    dude.y -= dudeBounds.height;
-            //}
         }
     }
 
 
     checkCollisions(collider) {
+        let collisions = 0;
         for (let i = 0; i < this._fruits.length; i++) {
             let fruit = this._fruits[i];
-            const isColliding = hitTestRectangle(collider, fruit.sprite);
+            const isColliding = hitTestRectangle(collider, fruit.boundaries);
             if (isColliding && fruit.sprite.visible) {
                 fruit.sprite.visible = false;
                 this._active--;
+                collisions++;
             }
         }
+        return collisions;
     }
 
     clean() {

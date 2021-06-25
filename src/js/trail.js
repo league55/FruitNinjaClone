@@ -1,12 +1,22 @@
 import * as PIXI from 'pixi.js'
-import app from "./app";
+import app, {shouldUseCamera} from "./app";
+//import {getLastFingerPosition} from "./pipe.js";
+
 
 export class Cursor {
     static getPos() {
+
+        //const mouse = shouldUseCamera ? getLastFingerPosition() : app.renderer.plugins.interaction.mouse.global;
         const mouse = app.renderer.plugins.interaction.mouse.global;
         return {x: mouse.x, y: mouse.y}
     }
 }
+
+export const historyX = [];
+export const historyY = [];
+export const points = [];
+export const historySize = 20;
+export const ropeSize = 100;
 
 export default () => {
 // Get the texture for rope.
