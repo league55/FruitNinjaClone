@@ -1,9 +1,8 @@
-//require('./pipe.js');
+require('./pipe.js');
 import initCursor, {Cursor} from "./trail";
 import app from "./app";
 import initFruitsWave from "./fruits";
 import initInterface from "./game_entities/interface";
-document.body.appendChild(app.view);
 
 initCursor();
 const getFruitWave = initFruitsWave();

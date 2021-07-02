@@ -1,13 +1,13 @@
 import * as PIXI from 'pixi.js'
 import app, {shouldUseCamera} from "./app";
-//import {getLastFingerPosition} from "./pipe.js";
+import {getLastFingerPosition} from "./pipe.js";
 
 
 export class Cursor {
     static getPos() {
 
-        //const mouse = shouldUseCamera ? getLastFingerPosition() : app.renderer.plugins.interaction.mouse.global;
-        const mouse = app.renderer.plugins.interaction.mouse.global;
+        const mouse = shouldUseCamera ? getLastFingerPosition() : app.renderer.plugins.interaction.mouse.global;
+        //const mouse = app.renderer.plugins.interaction.mouse.global;
         return {x: mouse.x, y: mouse.y}
     }
 }
@@ -51,7 +51,7 @@ export default () => {
     app.ticker.add((delta) => {
         // Read mouse points, this could be done also in mousemove/touchmove update. For simplicity it is done here for now.
         // When implementing this properly, make sure to implement touchmove as interaction plugins mouse might not update on certain devices.
-        const mouseposition = app.renderer.plugins.interaction.mouse.global;
+        const mouseposition = Cursor.getPos();
 
         // Update the mouse values to history
         historyX.pop();
@@ -71,30 +71,31 @@ export default () => {
         }
     });
 
-    /**
-     * Cubic interpolation based on https://github.com/osuushi/Smooth.js
-     */
-    function clipInput(k, arr) {
-        if (k < 0) k = 0;
-        if (k > arr.length - 1) k = arr.length - 1;
-        return arr[k];
-    }
-
-    function getTangent(k, factor, array) {
-        return factor * (clipInput(k + 1, array) - clipInput(k - 1, array)) / 2;
-    }
-
-    function cubicInterpolation(array, t, tangentFactor) {
-        if (tangentFactor == null) tangentFactor = 1;
-
-        const k = Math.floor(t);
-        const m = [getTangent(k, tangentFactor, array), getTangent(k + 1, tangentFactor, array)];
-        const p = [clipInput(k, array), clipInput(k + 1, array)];
-        t -= k;
-        const t2 = t * t;
-        const t3 = t * t2;
-        return (2 * t3 - 3 * t2 + 1) * p[0] + (t3 - 2 * t2 + t) * m[0] + (-2 * t3 + 3 * t2) * p[1] + (t3 - t2) * m[1];
-    }
 
     return new Cursor();
+}
+
+/**
+ * Cubic interpolation based on https://github.com/osuushi/Smooth.js
+ */
+function clipInput(k, arr) {
+    if (k < 0) k = 0;
+    if (k > arr.length - 1) k = arr.length - 1;
+    return arr[k];
+}
+
+function getTangent(k, factor, array) {
+    return factor * (clipInput(k + 1, array) - clipInput(k - 1, array)) / 2;
+}
+
+export function cubicInterpolation(array, t, tangentFactor) {
+    if (tangentFactor == null) tangentFactor = 1;
+
+    const k = Math.floor(t);
+    const m = [getTangent(k, tangentFactor, array), getTangent(k + 1, tangentFactor, array)];
+    const p = [clipInput(k, array), clipInput(k + 1, array)];
+    t -= k;
+    const t2 = t * t;
+    const t3 = t * t2;
+    return (2 * t3 - 3 * t2 + 1) * p[0] + (t3 - 2 * t2 + t) * m[0] + (-2 * t3 + 3 * t2) * p[1] + (t3 - t2) * m[1];
 }

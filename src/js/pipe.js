@@ -3,7 +3,7 @@ import {drawConnectors, drawLandmarks, lerp} from '@mediapipe/drawing_utils/draw
 import {HAND_CONNECTIONS, Hands} from '@mediapipe/hands/hands';
 import {Camera} from '@mediapipe/camera_utils/camera_utils';
 import {ControlPanel, FPS} from '@mediapipe/control_utils/control_utils';
-import app from "./app";
+import app, {APP_HEIGHT, APP_WIDTH} from "./app";
 import {cubicInterpolation, historySize, historyX, historyY, points, ropeSize} from "./trail";
 
 const videoElement =
@@ -12,7 +12,7 @@ const controlsElement =
     document.getElementsByClassName('control-panel')[0];
 
 const canvasWrapper = document.createElement("div");
-canvasWrapper.innerHTML = "<canvas class=\"output_canvas\" width=\"1280px\" height=\"720px\"></canvas>";
+canvasWrapper.innerHTML = "<canvas class=\"output_canvas\" width=\"" + APP_WIDTH + "px\" height=\"" + APP_HEIGHT+ "px\"></canvas>";
 document.body.append(canvasWrapper);
 
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
@@ -35,24 +35,7 @@ export const getLastFingerPosition = () => {
 const setPosition = (results) => {
     if(results && results.multiHandLandmarks) {
         let finger = results.multiHandLandmarks[0][8];
-        const mouseposition = {x: finger.x, y: finger.y};
-
-        // Update the mouse values to history
-        historyX.pop();
-        historyX.unshift(mouseposition.x);
-        historyY.pop();
-        historyY.unshift(mouseposition.y);
-        // Update the points to correspond with history.
-        for (let i = 0; i < ropeSize; i++) {
-            const p = points[i];
-
-            // Smooth the curve with cubic interpolation to prevent sharp edges.
-            const ix = cubicInterpolation(historyX, i / ropeSize * historySize);
-            const iy = cubicInterpolation(historyY, i / ropeSize * historySize);
-
-            p.x = ix;
-            p.y = iy;
-        }
+        position = {x: finger.x * app.screen.width, y: finger.y * app.screen.height};
     }
 }
 
@@ -69,13 +52,8 @@ function onResults(results) {
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
   if (results.multiHandLandmarks && results.multiHandedness) {
-    for (let index = 0; index < results.multiHandLandmarks.length; index++) {
-      const classification = results.multiHandedness[index];
-      const isRightHand = classification.label === 'Right';
-      const landmarks = results.multiHandLandmarks[index];
-      drawConnectors(
-          canvasCtx, landmarks, HAND_CONNECTIONS,
-          {color: isRightHand ? '#00FF00' : '#FF0000'}),
+      const isRightHand = true;
+      const landmarks = [results.multiHandLandmarks[0][8]];
           drawLandmarks(canvasCtx, landmarks, {
             color: isRightHand ? '#00FF00' : '#FF0000',
             fillColor: isRightHand ? '#FF0000' : '#00FF00',
@@ -83,7 +61,6 @@ function onResults(results) {
               return lerp(x.from.z, -0.15, .1, 10, 1);
             }
           });
-    }
   }
   canvasCtx.restore();
 }
@@ -100,8 +77,8 @@ const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
   },
-  width: 1280,
-  height: 720
+  width: APP_WIDTH,
+  height: APP_HEIGHT
 });
 camera.start();
 

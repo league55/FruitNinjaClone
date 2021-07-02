@@ -1,4 +1,6 @@
 // Our input frames will come from here.
+import {APP_HEIGHT, APP_WIDTH} from "../../src/js/app";
+
 const videoElement =
     document.getElementsByClassName('input_video')[0];
 const canvasElement =
@@ -61,8 +63,8 @@ const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
   },
-  width: 1280,
-  height: 720
+  width: APP_WIDTH,
+  height: APP_HEIGHT
 });
 camera.start();
 

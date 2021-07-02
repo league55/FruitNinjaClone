@@ -1,5 +1,5 @@
 import Fruit from "./fruit";
-import app from "../app";
+import app, {extraDebug} from "../app";
 import {hitTestRectangle} from "../collision_detecror";
 
 export default class Wave {
@@ -13,7 +13,9 @@ export default class Wave {
             const fruit = new Fruit();
             this._fruits.push(fruit);
             app.stage.addChild(fruit.sprite);
-            //app.stage.addChild(fruit.boundaries);
+            if(extraDebug) {
+                app.stage.addChild(fruit.boundaries);
+            }
         }
     }
 
@@ -23,6 +25,7 @@ export default class Wave {
             fruit.tick();
             if (fruit.sprite.y > app.screen.height) {
                 fruit.visible = false;
+                fruit.boundaries.visible = false;
                 this._active--;
             }
 
@@ -47,6 +50,7 @@ export default class Wave {
     clean() {
         for (let i = 0; i < this._fruits.length; i++) {
             app.stage.removeChild(this._fruits[i].sprite); //is .sprite.visible = false is more efficient?
+            app.stage.removeChild(this._fruits[i].boundaries); //is .sprite.visible = false is more efficient?
         }
     }
 
