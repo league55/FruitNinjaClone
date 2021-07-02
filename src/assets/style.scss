@@ -48,8 +48,18 @@ body {
   }
 }
 
-.output_canvas {
+.main_menu  {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
 
+.ingame_menu  {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+}
+.output_canvas {
   position: absolute;
   /*visibility: hidden;*/
   width: inherit;
@@ -69,24 +79,6 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.logo {
-  bottom: 10px;
-  right: 20px;
-
-  .title {
-    color: white;
-    font-size: 28px;
-  }
-
-  .subtitle {
-    position: relative;
-    color: white;
-    font-size: 10px;
-    left: -30px;
-    top: 20px;
-  }
 }
 
 .control-panel {
@@ -127,11 +119,21 @@ body {
   opacity: 0;
 }
 
-.shoutout {
-  left: 0;
-  right: 0;
-  bottom: 40px;
-  text-align: center;
-  font-size: 24px;
+.button {
+  display: inline-block;
+  padding: 5px 10px;
+  color: white;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  vertical-align: middle;
+  font-family: 'Rubik One', sans-serif;
+  text-decoration: none;
+  font-size: 4vw;
+  transition: all .5s;
+  background-color: #3498db;
+}
+
+.start_btn {
+  font-size: 14px;
 }

@@ -1,10 +1,10 @@
 // Our input frames will come from here.
-import {drawConnectors, drawLandmarks, lerp} from '@mediapipe/drawing_utils/drawing_utils';
-import {HAND_CONNECTIONS, Hands} from '@mediapipe/hands/hands';
+import {drawLandmarks, lerp} from '@mediapipe/drawing_utils/drawing_utils';
+import {Hands} from '@mediapipe/hands/hands';
 import {Camera} from '@mediapipe/camera_utils/camera_utils';
 import {ControlPanel, FPS} from '@mediapipe/control_utils/control_utils';
 import app, {APP_HEIGHT, APP_WIDTH, extraDebug} from "./app";
-import {cubicInterpolation, historySize, historyX, historyY, points, ropeSize} from "./trail";
+import stateManager, {State} from "./stateManager";
 
 const videoElement =
     document.getElementsByClassName('input_video')[0];
@@ -37,8 +37,11 @@ const setPosition = (results) => {
 
 function onResults(results) {
   setPosition(results);
-  // Hide the spinner.
-  document.body.classList.add('loaded');
+  if(!stateManager.state) {
+      // Hide the spinner.
+      document.body.classList.add('loaded');
+      stateManager.state = State.PAUSE;
+  }
 
   // Update the frame rate.
   fpsControl.tick();
