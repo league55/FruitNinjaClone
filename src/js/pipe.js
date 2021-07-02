@@ -3,17 +3,13 @@ import {drawConnectors, drawLandmarks, lerp} from '@mediapipe/drawing_utils/draw
 import {HAND_CONNECTIONS, Hands} from '@mediapipe/hands/hands';
 import {Camera} from '@mediapipe/camera_utils/camera_utils';
 import {ControlPanel, FPS} from '@mediapipe/control_utils/control_utils';
-import app, {APP_HEIGHT, APP_WIDTH} from "./app";
+import app, {APP_HEIGHT, APP_WIDTH, extraDebug} from "./app";
 import {cubicInterpolation, historySize, historyX, historyY, points, ropeSize} from "./trail";
 
 const videoElement =
     document.getElementsByClassName('input_video')[0];
 const controlsElement =
     document.getElementsByClassName('control-panel')[0];
-
-const canvasWrapper = document.createElement("div");
-canvasWrapper.innerHTML = "<canvas class=\"output_canvas\" width=\"" + APP_WIDTH + "px\" height=\"" + APP_HEIGHT+ "px\"></canvas>";
-document.body.append(canvasWrapper);
 
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 const canvasCtx = canvasElement.getContext('2d');
@@ -51,16 +47,18 @@ function onResults(results) {
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-  if (results.multiHandLandmarks && results.multiHandedness) {
-      const isRightHand = true;
-      const landmarks = [results.multiHandLandmarks[0][8]];
+  if(extraDebug) {
+      if (results.multiHandLandmarks && results.multiHandedness) {
+          const isRightHand = true;
+          const landmarks = [results.multiHandLandmarks[0][8]];
           drawLandmarks(canvasCtx, landmarks, {
-            color: isRightHand ? '#00FF00' : '#FF0000',
-            fillColor: isRightHand ? '#FF0000' : '#00FF00',
-            radius: (x) => {
-              return lerp(x.from.z, -0.15, .1, 10, 1);
-            }
+              color: isRightHand ? '#00FF00' : '#FF0000',
+              fillColor: isRightHand ? '#FF0000' : '#00FF00',
+              radius: (x) => {
+                  return lerp(x.from.z, -0.4, .01, 1, 0.1);
+              }
           });
+      }
   }
   canvasCtx.restore();
 }

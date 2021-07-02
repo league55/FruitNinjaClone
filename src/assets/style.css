@@ -34,13 +34,15 @@ body {
 .container {
   position: absolute;
   background-color: #596e73;
-  height: 720px;
-  width: 1280px;
+  height: 480px;
+  width: 640px;
 }
 
 .input_video {
   position: absolute;
-  visibility: hidden;
+  /*visibility: hidden;*/
+  width: inherit;
+  height: inherit;
   top: 0;
   left: 0;
   right: 0;
@@ -52,10 +54,24 @@ body {
 
 .output_canvas {
   position: absolute;
-  height: 480px;
-  width: 640px;
-  left: 0;
+  /*visibility: hidden;*/
+  width: inherit;
+  height: inherit;
   top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#scene {
+  position: absolute;
+  /*visibility: hidden;*/
+  width: inherit;
+  height: inherit;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .logo {
