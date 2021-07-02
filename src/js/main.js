@@ -3,13 +3,12 @@ import stateManager, {State} from "./stateManager";
 require('./pipe.js');
 import initCursor, {Cursor} from "./trail";
 import app from "./app";
-import initFruitsWave from "./fruits";
+import getFruitWave from "./fruits";
 import initInterface from "./game_entities/interface";
 import initMenu from "./menu";
 
 initCursor();
 initMenu();
-const getFruitWave = initFruitsWave();
 const userInterface = initInterface();
 
 function gameLoop(delta) {

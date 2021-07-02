@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js'
-import app from "../app";
+import app, {extraDebug} from "../app";
 
 const g = 0.05;
 
@@ -50,6 +50,10 @@ export default class Fruit {
     }
 
     tick() {
+        // otherwise first wave boundaries are very small
+        this.boundaries.width = this._sprite.width * 0.8;
+        this.boundaries.height =  this._sprite.height * 0.8;
+
         this._velocity += Math.sin(Math.PI * 2 + g) * 2;
 
         this.sprite.direction += this.sprite.turningSpeed * 0.01;
